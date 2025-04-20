@@ -1,0 +1,51 @@
+<!-- register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agent Registration</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    async function registerUser() {
+      const name = document.getElementById("name").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      if (!name || !email || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      try {
+        const res = await fetch("https://your-backend-api.onrender.com/api/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ name, email, password })
+        });
+
+        const data = await res.json();
+        if (data.success) {
+          alert("Registration successful! Redirecting to dashboard...");
+          window.location.href = "dashboard.html";
+        } else {
+          alert("Registration failed: " + (data.error || "Unknown error"));
+        }
+      } catch (err) {
+        alert("Request failed: " + err.message);
+      }
+    }
+  </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <h2 class="text-xl font-bold mb-4">Register as Property Agent</h2>
+    <input id="name" type="text" placeholder="Full Name" class="w-full mb-2 p-2 border rounded" />
+    <input id="email" type="email" placeholder="Email Address" class="w-full mb-2 p-2 border rounded" />
+    <input id="password" type="password" placeholder="Password" class="w-full mb-4 p-2 border rounded" />
+    <button onclick="registerUser()" class="w-full bg-blue-600 text-white py-2 rounded">Register</button>
+  </div>
+</body>
+</html>
